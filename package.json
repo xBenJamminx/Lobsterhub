@@ -11,21 +11,25 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
-    "@tanstack/react-router": "^1.93.0",
-    "@tanstack/start": "^1.93.0",
+    "@tanstack/react-router": "1.86.0",
+    "@tanstack/start": "1.86.0",
     "prism-react-renderer": "^2.4.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vinxi": "^0.5.1"
+    "vinxi": "0.4.3"
+  },
+  "overrides": {
+    "@tanstack/react-router": "1.86.0",
+    "@tanstack/router-generator": "1.86.0"
   }
 }
