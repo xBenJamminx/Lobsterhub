@@ -123,7 +123,7 @@ function WorkflowDetailPage() {
           {workflow.required_skills.map((skill) => (
             <a
               key={skill}
-              href={`https://clawdhub.com/skill/${skill}`}
+              href={`https://clawdhub.com/${skill}`}
               target="_blank"
               rel="noopener noreferrer"
               className="skill-link"
