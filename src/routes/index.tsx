@@ -56,8 +56,7 @@ function HomePage() {
       <section className="hero">
         <h1 className="hero-title">Lobster Workflows</h1>
         <p className="hero-subtitle">
-          Discover and share automation pipelines for Clawdbot's workflow shell.
-          Chain skills together to build powerful automations.
+          Safe automation for Clawdbot — workflows that ask before acting.
         </p>
 
         {/* Search */}

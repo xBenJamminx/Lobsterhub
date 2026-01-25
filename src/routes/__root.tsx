@@ -36,19 +36,29 @@ function RootComponent() {
 
 function Header() {
   return (
-    <header className="header">
-      <Link to="/" className="logo">
-        <span className="logo-icon">🦞</span>
-        <span>LobsterHub</span>
-      </Link>
-      <nav className="nav-links">
-        <Link to="/" className="nav-link">Browse</Link>
-        <Link to="/submit" className="nav-link">Submit</Link>
-        <a href="https://docs.clawd.bot/tools/lobster" target="_blank" rel="noopener noreferrer" className="nav-link">
-          Docs
-        </a>
-      </nav>
-    </header>
+    <>
+      <header className="header">
+        <Link to="/" className="logo">
+          <span className="logo-icon">🦞</span>
+          <span>LobsterHub</span>
+        </Link>
+        <nav className="nav-links">
+          <Link to="/" className="nav-link">Browse</Link>
+          <Link to="/submit" className="nav-link">Submit</Link>
+          <a href="https://docs.clawd.bot/tools/lobster" target="_blank" rel="noopener noreferrer" className="nav-link">
+            Docs
+          </a>
+        </nav>
+      </header>
+      <div className="announcement-strip">
+        <span>
+          <strong>Lobster</strong> chains skills (Gmail, Slack, GitHub, etc.) into multi-step automations for <a href="https://clawd.bot" target="_blank" rel="noopener noreferrer">Clawdbot</a>. Workflows ask before acting — you approve each step.
+        </span>
+        <a href="https://github.com/clawdbot/lobster" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <span className="divider">•</span>
+        <a href="https://github.com/clawdbot/skills" target="_blank" rel="noopener noreferrer">50+ Skills</a>
+      </div>
+    </>
   )
 }
 

@@ -8,6 +8,38 @@ export const Route = createFileRoute('/workflow/$slug')({
   component: WorkflowDetailPage,
 })
 
+function formatDescription(text: string) {
+  // Split by double newlines for paragraphs
+  const blocks = text.split(/\n\n+/)
+
+  return blocks.map((block, i) => {
+    const lines = block.split('\n')
+
+    // Check if this block is a bullet list
+    const isList = lines.every(line => line.trim().startsWith('-') || line.trim() === '')
+
+    if (isList) {
+      const items = lines.filter(line => line.trim().startsWith('-'))
+      return (
+        <ul key={i} className="description-list">
+          {items.map((item, j) => (
+            <li key={j}>{item.replace(/^-\s*/, '').trim()}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    // Regular paragraph - handle inline formatting
+    const formatted = block
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+
+    return (
+      <p key={i} className="description-paragraph" dangerouslySetInnerHTML={{ __html: formatted }} />
+    )
+  })
+}
+
 function WorkflowDetailPage() {
   const { slug } = Route.useParams()
   const [workflow, setWorkflow] = useState<Workflow | null | undefined>(undefined)
@@ -68,9 +100,9 @@ function WorkflowDetailPage() {
           <span>•</span>
           <span>{workflow.category}</span>
         </div>
-        <p className="detail-description">
-          {workflow.long_description || workflow.description}
-        </p>
+        <div className="detail-description">
+          {formatDescription(workflow.long_description || workflow.description)}
+        </div>
       </header>
 
       {/* Install Command */}

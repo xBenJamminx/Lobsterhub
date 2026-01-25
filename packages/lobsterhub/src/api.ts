@@ -1,6 +1,6 @@
 // Supabase REST API
-const SUPABASE_URL = process.env.LOBSTERHUB_SUPABASE_URL || 'https://your-project.supabase.co'
-const SUPABASE_ANON_KEY = process.env.LOBSTERHUB_SUPABASE_ANON_KEY || ''
+const SUPABASE_URL = 'https://xxdmbzlhnpgllrzclkpy.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4ZG1iemxobnBnbGxyemNsa3B5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkzNDIxNjIsImV4cCI6MjA4NDkxODE2Mn0.sVK4wmeB5fv9k4wo--61PCl0K-mfsOjScTerYCC7fJw'
 
 export interface Workflow {
   id: string
@@ -27,7 +27,7 @@ function getHeaders() {
 }
 
 export async function fetchWorkflow(slug: string): Promise<Workflow | null> {
-  const url = `${SUPABASE_URL}/rest/v1/workflows?slug=eq.${encodeURIComponent(slug)}&select=*`
+  const url = `${SUPABASE_URL}/rest/v1/workflows?slug=eq.${encodeURIComponent(slug)}&status=eq.approved&select=*`
 
   const response = await fetch(url, {
     headers: getHeaders(),
@@ -51,7 +51,7 @@ export async function fetchWorkflow(slug: string): Promise<Workflow | null> {
 
 export async function searchWorkflows(query: string): Promise<Workflow[]> {
   // Use full-text search or fallback to ilike
-  const url = `${SUPABASE_URL}/rest/v1/workflows?or=(name.ilike.*${encodeURIComponent(query)}*,description.ilike.*${encodeURIComponent(query)}*)&select=*&order=downloads.desc`
+  const url = `${SUPABASE_URL}/rest/v1/workflows?status=eq.approved&or=(name.ilike.*${encodeURIComponent(query)}*,description.ilike.*${encodeURIComponent(query)}*)&select=*&order=downloads.desc`
 
   const response = await fetch(url, {
     headers: getHeaders(),
@@ -68,7 +68,7 @@ export async function listWorkflows(options?: {
   category?: string
   limit?: number
 }): Promise<Workflow[]> {
-  let url = `${SUPABASE_URL}/rest/v1/workflows?select=*&order=created_at.desc`
+  let url = `${SUPABASE_URL}/rest/v1/workflows?status=eq.approved&select=*&order=created_at.desc`
 
   if (options?.category) {
     url += `&category=eq.${encodeURIComponent(options.category)}`

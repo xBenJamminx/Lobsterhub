@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { createWorkflow, categories } from '../lib/api'
 
@@ -7,8 +7,6 @@ export const Route = createFileRoute('/submit')({
 })
 
 function SubmitPage() {
-  const navigate = useNavigate()
-
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -23,6 +21,7 @@ function SubmitPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -70,12 +69,53 @@ function SubmitPage() {
         tags,
       })
 
-      navigate({ to: `/workflow/${formData.slug}` })
+      setSubmitted(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit workflow')
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  if (submitted) {
+    return (
+      <div className="form-page">
+        <div className="success-message">
+          <div className="success-icon">✓</div>
+          <h1 className="form-title">Workflow Submitted!</h1>
+          <p className="form-subtitle">
+            Thanks for submitting <strong>{formData.name}</strong>! Your workflow is now pending review.
+            We'll review it shortly and it will appear in the marketplace once approved.
+          </p>
+          <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <Link to="/" className="submit-btn" style={{ textDecoration: 'none' }}>
+              Browse Workflows
+            </Link>
+            <button
+              onClick={() => {
+                setSubmitted(false)
+                setFormData({
+                  name: '',
+                  slug: '',
+                  description: '',
+                  long_description: '',
+                  author: '',
+                  author_url: '',
+                  yaml: '',
+                  required_skills: '',
+                  category: 'other',
+                  tags: '',
+                })
+              }}
+              className="submit-btn"
+              style={{ background: 'var(--surface)', color: 'var(--text)' }}
+            >
+              Submit Another
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

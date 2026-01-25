@@ -339,10 +339,47 @@ a {
 }
 
 .detail-description {
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: var(--ink-soft);
   margin: 1.5rem 0;
   line-height: 1.7;
+}
+
+.detail-description .description-paragraph {
+  margin: 0 0 1rem;
+}
+
+.detail-description .description-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.detail-description .description-list {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+  list-style: none;
+}
+
+.detail-description .description-list li {
+  position: relative;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.detail-description .description-list li::before {
+  content: "→";
+  position: absolute;
+  left: -1.25rem;
+  color: var(--accent);
+}
+
+.detail-description strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.detail-description em {
+  color: var(--ink);
+  font-style: italic;
 }
 
 /* Install Box */
@@ -551,6 +588,43 @@ a {
   cursor: not-allowed;
 }
 
+/* Success Message */
+.success-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  background: var(--seafoam-soft);
+  color: var(--seafoam);
+  border-radius: 50%;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.success-message .form-title {
+  color: var(--seafoam);
+}
+
+.success-message .form-subtitle {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.success-message .submit-btn {
+  width: auto;
+  padding: 0.75rem 1.5rem;
+}
+
 /* Footer */
 .footer {
   padding: 2rem 1.5rem;
@@ -645,4 +719,34 @@ a {
 
 .back-link:hover {
   color: var(--ink);
+}
+
+/* Announcement Strip */
+.announcement-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.announcement-strip strong {
+  color: var(--ink-soft);
+}
+
+.announcement-strip a {
+  color: var(--accent);
+}
+
+.announcement-strip a:hover {
+  text-decoration: underline;
+}
+
+.announcement-strip .divider {
+  color: var(--ink-muted);
+  opacity: 0.5;
 }

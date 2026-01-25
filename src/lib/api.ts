@@ -16,6 +16,7 @@ export async function getWorkflows(options?: {
   let query = supabase
     .from('workflows')
     .select('*')
+    .eq('status', 'approved')
     .order('created_at', { ascending: false })
 
   if (options?.category) {
@@ -45,6 +46,7 @@ export async function getWorkflowBySlug(slug: string): Promise<Workflow | null> 
     .from('workflows')
     .select('*')
     .eq('slug', slug)
+    .eq('status', 'approved')
     .single()
 
   if (error) {
@@ -67,6 +69,7 @@ export async function searchWorkflows(query: string): Promise<Workflow[]> {
   const { data, error } = await supabase
     .from('workflows')
     .select('*')
+    .eq('status', 'approved')
     .textSearch('fts', query, { type: 'websearch' })
     .order('downloads', { ascending: false })
 
@@ -76,6 +79,7 @@ export async function searchWorkflows(query: string): Promise<Workflow[]> {
     const { data: fallbackData } = await supabase
       .from('workflows')
       .select('*')
+      .eq('status', 'approved')
       .or(`name.ilike.%${query}%,description.ilike.%${query}%`)
       .order('downloads', { ascending: false })
 
