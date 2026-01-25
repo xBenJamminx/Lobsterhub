@@ -30,7 +30,7 @@ export async function install(slug: string, options: InstallOptions): Promise<vo
     console.log(`\nInstalled: ${workflow.name}`)
     console.log(`Location: ${filePath}`)
     console.log(`\nRequired skills:`)
-    workflow.requiredSkills.forEach((skill: string) => {
+    workflow.required_skills.forEach((skill: string) => {
       console.log(`  - ${skill}`)
     })
     console.log(`\nMake sure you have all required skills installed from ClawdHub.`)

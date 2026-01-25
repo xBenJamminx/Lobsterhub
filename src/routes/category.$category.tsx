@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useQuery } from 'convex/react'
-import { api } from '../../convex/_generated/api'
+import { useState, useEffect } from 'react'
+import { getWorkflows, categories } from '../lib/api'
+import type { Workflow } from '../lib/supabase'
 
 export const Route = createFileRoute('/category/$category')({
   component: CategoryPage,
@@ -8,10 +9,13 @@ export const Route = createFileRoute('/category/$category')({
 
 function CategoryPage() {
   const { category } = Route.useParams()
-  const workflows = useQuery(api.workflows.list, { category, limit: 50 })
-  const categories = useQuery(api.workflows.getCategories, {})
+  const [workflows, setWorkflows] = useState<Workflow[] | undefined>(undefined)
 
-  const categoryInfo = categories?.find((c) => c.id === category)
+  const categoryInfo = categories.find((c) => c.id === category)
+
+  useEffect(() => {
+    getWorkflows({ category, limit: 50 }).then(setWorkflows)
+  }, [category])
 
   return (
     <div style={{ padding: '2rem 0' }}>
@@ -41,17 +45,17 @@ function CategoryPage() {
       ) : (
         <div className="workflow-grid">
           {workflows.map((workflow) => (
-            <Link key={workflow._id} to={`/workflow/${workflow.slug}`} className="card">
+            <Link key={workflow.id} to={`/workflow/${workflow.slug}`} className="card">
               <div className="card-header">
                 <h3 className="card-title">{workflow.name}</h3>
               </div>
               <p className="card-description">{workflow.description}</p>
               <div className="tags">
-                {workflow.requiredSkills.slice(0, 3).map((skill) => (
+                {workflow.required_skills.slice(0, 3).map((skill) => (
                   <span key={skill} className="tag">{skill}</span>
                 ))}
-                {workflow.requiredSkills.length > 3 && (
-                  <span className="tag">+{workflow.requiredSkills.length - 3}</span>
+                {workflow.required_skills.length > 3 && (
+                  <span className="tag">+{workflow.required_skills.length - 3}</span>
                 )}
               </div>
               <div className="card-footer">

@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useQuery } from 'convex/react'
-import { api } from '../../convex/_generated/api'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Highlight, themes } from 'prism-react-renderer'
+import { getWorkflowBySlug, incrementDownloads } from '../lib/api'
+import type { Workflow } from '../lib/supabase'
 
 export const Route = createFileRoute('/workflow/$slug')({
   component: WorkflowDetailPage,
@@ -10,9 +10,13 @@ export const Route = createFileRoute('/workflow/$slug')({
 
 function WorkflowDetailPage() {
   const { slug } = Route.useParams()
-  const workflow = useQuery(api.workflows.getBySlug, { slug })
+  const [workflow, setWorkflow] = useState<Workflow | null | undefined>(undefined)
   const [copied, setCopied] = useState(false)
   const [yamlCopied, setYamlCopied] = useState(false)
+
+  useEffect(() => {
+    getWorkflowBySlug(slug).then(setWorkflow)
+  }, [slug])
 
   if (workflow === undefined) {
     return <div className="loading">Loading workflow...</div>
@@ -38,6 +42,8 @@ function WorkflowDetailPage() {
     await navigator.clipboard.writeText(installCommand)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+    // Track as a download intent
+    incrementDownloads(workflow.slug)
   }
 
   const copyYaml = async () => {
@@ -63,7 +69,7 @@ function WorkflowDetailPage() {
           <span>{workflow.category}</span>
         </div>
         <p className="detail-description">
-          {workflow.longDescription || workflow.description}
+          {workflow.long_description || workflow.description}
         </p>
       </header>
 
@@ -82,7 +88,7 @@ function WorkflowDetailPage() {
       <section className="skills-section">
         <h2 className="skills-title">Required Skills</h2>
         <div className="skills-list">
-          {workflow.requiredSkills.map((skill) => (
+          {workflow.required_skills.map((skill) => (
             <a
               key={skill}
               href={`https://clawdhub.com/skill/${skill}`}

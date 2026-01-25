@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useMutation, useQuery } from 'convex/react'
-import { api } from '../../convex/_generated/api'
 import { useState } from 'react'
+import { createWorkflow, categories } from '../lib/api'
 
 export const Route = createFileRoute('/submit')({
   component: SubmitPage,
@@ -9,18 +8,16 @@ export const Route = createFileRoute('/submit')({
 
 function SubmitPage() {
   const navigate = useNavigate()
-  const createWorkflow = useMutation(api.workflows.create)
-  const categories = useQuery(api.workflows.getCategories, {})
 
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
     description: '',
-    longDescription: '',
+    long_description: '',
     author: '',
-    authorUrl: '',
+    author_url: '',
     yaml: '',
-    requiredSkills: '',
+    required_skills: '',
     category: 'other' as const,
     tags: '',
   })
@@ -50,7 +47,7 @@ function SubmitPage() {
 
     try {
       // Parse skills and tags from comma-separated strings
-      const requiredSkills = formData.requiredSkills
+      const required_skills = formData.required_skills
         .split(',')
         .map((s) => s.trim())
         .filter((s) => s.length > 0)
@@ -64,11 +61,11 @@ function SubmitPage() {
         name: formData.name,
         slug: formData.slug,
         description: formData.description,
-        longDescription: formData.longDescription || undefined,
+        long_description: formData.long_description || null,
         author: formData.author,
-        authorUrl: formData.authorUrl || undefined,
+        author_url: formData.author_url || null,
         yaml: formData.yaml,
-        requiredSkills,
+        required_skills,
         category: formData.category,
         tags,
       })
@@ -145,15 +142,15 @@ function SubmitPage() {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="longDescription">
+          <label className="form-label" htmlFor="long_description">
             Long Description
           </label>
           <textarea
-            id="longDescription"
-            name="longDescription"
+            id="long_description"
+            name="long_description"
             className="form-textarea"
             placeholder="Detailed description of what this workflow does..."
-            value={formData.longDescription}
+            value={formData.long_description}
             onChange={handleChange}
             rows={4}
             style={{ fontFamily: 'var(--font-body)' }}
@@ -177,16 +174,16 @@ function SubmitPage() {
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="authorUrl">
+          <label className="form-label" htmlFor="author_url">
             Author URL
           </label>
           <input
             type="url"
-            id="authorUrl"
-            name="authorUrl"
+            id="author_url"
+            name="author_url"
             className="form-input"
             placeholder="https://github.com/yourname"
-            value={formData.authorUrl}
+            value={formData.author_url}
             onChange={handleChange}
           />
         </div>
@@ -203,7 +200,7 @@ function SubmitPage() {
             onChange={handleChange}
             required
           >
-            {categories?.map((cat) => (
+            {categories.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.icon} {cat.name}
               </option>
@@ -237,16 +234,16 @@ steps:
         </div>
 
         <div className="form-group">
-          <label className="form-label" htmlFor="requiredSkills">
+          <label className="form-label" htmlFor="required_skills">
             Required Skills *
           </label>
           <input
             type="text"
-            id="requiredSkills"
-            name="requiredSkills"
+            id="required_skills"
+            name="required_skills"
             className="form-input"
             placeholder="gog.gmail, gog.gcal, llm-task"
-            value={formData.requiredSkills}
+            value={formData.required_skills}
             onChange={handleChange}
             required
           />

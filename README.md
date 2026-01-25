@@ -17,9 +17,9 @@ Lobster is Clawdbot's workflow shell that chains skills into powerful automation
 ## Tech Stack
 
 - **Frontend**: TanStack Start (React meta-framework)
-- **Backend**: Convex (database, real-time sync, HTTP API)
+- **Backend**: Supabase (PostgreSQL database, REST API)
 - **Styling**: Tailwind CSS
-- **Deploy**: Vercel
+- **Deploy**: Vercel / Cloudflare Pages
 
 ## Getting Started
 
@@ -27,6 +27,7 @@ Lobster is Clawdbot's workflow shell that chains skills into powerful automation
 
 - Node.js 18+
 - npm or bun
+- Supabase account (free tier)
 
 ### Installation
 
@@ -40,21 +41,19 @@ npm install
 
 # Copy environment variables
 cp .env.local.example .env.local
-# Edit .env.local with your Convex deployment URL
-
-# Start Convex dev server (in a separate terminal)
-npx convex dev
-
-# Start the development server
-npm run dev
+# Edit .env.local with your Supabase project URL and anon key
 ```
 
-### Seeding Data
+### Database Setup
 
-After starting the Convex dev server, seed the database with example workflows:
+1. Create a new Supabase project at [supabase.com](https://supabase.com)
+2. Go to the SQL Editor in your Supabase dashboard
+3. Run the schema from `supabase/schema.sql` - this creates the tables and seeds example data
+
+### Running Locally
 
 ```bash
-npx convex run seed:seedData
+npm run dev
 ```
 
 ## CLI Usage
@@ -117,14 +116,13 @@ lobsterhub/
 │   │   ├── workflow.$slug.tsx  # Workflow detail page
 │   │   ├── submit.tsx    # Submit form
 │   │   └── category.$category.tsx  # Category filter
-│   ├── convex/
-│   │   └── client.ts     # Convex client setup
+│   ├── lib/
+│   │   ├── supabase.ts   # Supabase client
+│   │   ├── api.ts        # API functions
+│   │   └── database.types.ts  # TypeScript types
 │   └── styles.css        # Global styles (Tailwind)
-├── convex/
-│   ├── schema.ts         # Database schema
-│   ├── workflows.ts      # Queries and mutations
-│   ├── seed.ts           # Seed data
-│   └── http.ts           # HTTP API routes
+├── supabase/
+│   └── schema.sql        # Database schema + seed data
 ├── packages/
 │   └── lobsterhub/       # CLI package
 │       └── src/
@@ -134,14 +132,14 @@ lobsterhub/
 └── package.json
 ```
 
-## API Endpoints
+## API
 
-The HTTP API is available for CLI and external integrations:
+The app uses Supabase's REST API directly. The CLI can be configured with environment variables:
 
-- `GET /api/workflows` - List all workflows
-- `GET /api/workflows?category=productivity` - Filter by category
-- `GET /api/workflows/:slug` - Get workflow by slug (increments downloads)
-- `GET /api/search?q=email` - Search workflows
+```bash
+export LOBSTERHUB_SUPABASE_URL=https://your-project.supabase.co
+export LOBSTERHUB_SUPABASE_ANON_KEY=your-anon-key
+```
 
 ## Contributing
 

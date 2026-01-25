@@ -1,7 +1,7 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useQuery } from 'convex/react'
-import { api } from '../../convex/_generated/api'
-import { useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState, useEffect } from 'react'
+import { getWorkflows, searchWorkflows, categories } from '../lib/api'
+import type { Workflow } from '../lib/supabase'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -10,18 +10,43 @@ export const Route = createFileRoute('/')({
 function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const [featuredWorkflows, setFeaturedWorkflows] = useState<Workflow[]>([])
+  const [allWorkflows, setAllWorkflows] = useState<Workflow[]>([])
+  const [searchResults, setSearchResults] = useState<Workflow[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const featuredWorkflows = useQuery(api.workflows.list, { featured: true, limit: 6 })
-  const allWorkflows = useQuery(api.workflows.list, {
-    limit: 20,
-    category: selectedCategory ?? undefined,
-  })
-  const searchResults = useQuery(
-    api.workflows.search,
-    searchQuery.length > 0 ? { query: searchQuery } : 'skip'
-  )
-  const categories = useQuery(api.workflows.getCategories, {})
+  // Fetch featured workflows
+  useEffect(() => {
+    getWorkflows({ featured: true, limit: 6 }).then(setFeaturedWorkflows)
+  }, [])
+
+  // Fetch all/filtered workflows
+  useEffect(() => {
+    setLoading(true)
+    getWorkflows({
+      category: selectedCategory ?? undefined,
+      limit: 20,
+    }).then((data) => {
+      setAllWorkflows(data)
+      setLoading(false)
+    })
+  }, [selectedCategory])
+
+  // Search workflows
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      setLoading(true)
+      const timeoutId = setTimeout(() => {
+        searchWorkflows(searchQuery).then((data) => {
+          setSearchResults(data)
+          setLoading(false)
+        })
+      }, 300) // Debounce
+      return () => clearTimeout(timeoutId)
+    } else {
+      setSearchResults([])
+    }
+  }, [searchQuery])
 
   const displayWorkflows = searchQuery.length > 0 ? searchResults : allWorkflows
 
@@ -54,7 +79,7 @@ function HomePage() {
           >
             All
           </button>
-          {categories?.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat.id}
               className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
@@ -67,14 +92,14 @@ function HomePage() {
       </section>
 
       {/* Featured Section */}
-      {!searchQuery && !selectedCategory && featuredWorkflows && featuredWorkflows.length > 0 && (
+      {!searchQuery && !selectedCategory && featuredWorkflows.length > 0 && (
         <section className="section">
           <div className="section-header">
             <h2 className="section-title">Featured Workflows</h2>
           </div>
           <div className="workflow-grid">
             {featuredWorkflows.map((workflow) => (
-              <WorkflowCard key={workflow._id} workflow={workflow} featured />
+              <WorkflowCard key={workflow.id} workflow={workflow} featured />
             ))}
           </div>
         </section>
@@ -87,11 +112,11 @@ function HomePage() {
             {searchQuery
               ? `Search Results`
               : selectedCategory
-                ? `${categories?.find((c) => c.id === selectedCategory)?.name} Workflows`
+                ? `${categories.find((c) => c.id === selectedCategory)?.name} Workflows`
                 : 'All Workflows'}
           </h2>
         </div>
-        {displayWorkflows === undefined ? (
+        {loading ? (
           <div className="loading">Loading workflows...</div>
         ) : displayWorkflows.length === 0 ? (
           <div className="empty-state">
@@ -101,7 +126,7 @@ function HomePage() {
         ) : (
           <div className="workflow-grid">
             {displayWorkflows.map((workflow) => (
-              <WorkflowCard key={workflow._id} workflow={workflow} />
+              <WorkflowCard key={workflow.id} workflow={workflow} />
             ))}
           </div>
         )}
@@ -111,16 +136,7 @@ function HomePage() {
 }
 
 interface WorkflowCardProps {
-  workflow: {
-    _id: string
-    slug: string
-    name: string
-    description: string
-    author: string
-    category: string
-    downloads: number
-    requiredSkills: string[]
-  }
+  workflow: Workflow
   featured?: boolean
 }
 
@@ -133,11 +149,11 @@ function WorkflowCard({ workflow, featured }: WorkflowCardProps) {
       </div>
       <p className="card-description">{workflow.description}</p>
       <div className="tags">
-        {workflow.requiredSkills.slice(0, 3).map((skill) => (
+        {workflow.required_skills.slice(0, 3).map((skill) => (
           <span key={skill} className="tag">{skill}</span>
         ))}
-        {workflow.requiredSkills.length > 3 && (
-          <span className="tag">+{workflow.requiredSkills.length - 3}</span>
+        {workflow.required_skills.length > 3 && (
+          <span className="tag">+{workflow.required_skills.length - 3}</span>
         )}
       </div>
       <div className="card-footer">
