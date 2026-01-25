@@ -9,7 +9,10 @@ export const Route = createRootRoute({
       { title: 'LobsterHub - Workflow Marketplace for Lobster' },
       { name: 'description', content: 'Discover and share Lobster workflows. Browse community-created automation pipelines for Clawdbot.' },
     ],
-    links: [{ rel: 'stylesheet', href: appCss }],
+    links: [
+      { rel: 'stylesheet', href: appCss },
+      { rel: 'icon', href: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🦞</text></svg>' },
+    ],
   }),
   component: RootComponent,
 })
