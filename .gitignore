@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.output/
+.vinxi/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Convex
+convex/_generated/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+
+# Vercel
+.vercel/
+
+# Misc
+*.tgz
