@@ -1,0 +1,37 @@
+{
+  "name": "lobsterhub",
+  "version": "0.1.0",
+  "description": "CLI for LobsterHub - Install and manage Lobster workflows",
+  "type": "module",
+  "bin": {
+    "lobsterhub": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "lobster",
+    "clawdbot",
+    "workflow",
+    "automation",
+    "cli"
+  ],
+  "author": "Clawdbot",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clawdbot/lobsterhub"
+  }
+}
