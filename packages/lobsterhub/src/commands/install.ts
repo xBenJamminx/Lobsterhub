@@ -1,10 +1,12 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import * as os from 'node:os'
+import { execSync } from 'node:child_process'
 import { fetchWorkflow } from '../api.js'
 
 interface InstallOptions {
   dir: string
+  skipSkills: boolean
 }
 
 export async function install(slug: string, options: InstallOptions): Promise<void> {
@@ -29,12 +31,33 @@ export async function install(slug: string, options: InstallOptions): Promise<vo
 
     console.log(`\nInstalled: ${workflow.name}`)
     console.log(`Location: ${filePath}`)
-    console.log(`\nRequired skills:`)
-    workflow.required_skills.forEach((skill: string) => {
-      console.log(`  - ${skill}`)
-    })
-    console.log(`\nMake sure you have all required skills installed from ClawdHub.`)
-    console.log(`Run: npx clawdhub install <skill-name>`)
+
+    // Install required skills
+    if (workflow.required_skills.length > 0 && !options.skipSkills) {
+      console.log(`\nInstalling ${workflow.required_skills.length} required skill(s)...`)
+
+      for (const skill of workflow.required_skills) {
+        console.log(`  Installing ${skill}...`)
+        try {
+          execSync(`npx clawdhub install ${skill}`, {
+            stdio: 'inherit',
+            timeout: 60000
+          })
+        } catch {
+          console.warn(`  Warning: Could not install skill "${skill}" - you may need to install it manually`)
+        }
+      }
+
+      console.log(`\nDone! Workflow and skills installed.`)
+    } else if (workflow.required_skills.length > 0) {
+      console.log(`\nRequired skills (skipped):`)
+      workflow.required_skills.forEach((skill: string) => {
+        console.log(`  - ${skill}`)
+      })
+      console.log(`\nRun: npx clawdhub install <skill-name>`)
+    } else {
+      console.log(`\nDone! No additional skills required.`)
+    }
   } catch (error) {
     console.error(`Error installing workflow: ${error instanceof Error ? error.message : error}`)
     process.exit(1)

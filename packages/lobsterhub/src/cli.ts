@@ -12,8 +12,9 @@ program
 
 program
   .command('install <slug>')
-  .description('Install a workflow from LobsterHub')
+  .description('Install a workflow from LobsterHub (includes required skills)')
   .option('-d, --dir <path>', 'Installation directory', '~/.clawdbot/lobster/workflows')
+  .option('--skip-skills', 'Skip installing required skills', false)
   .action(install)
 
 program
