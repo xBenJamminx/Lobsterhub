@@ -1,12 +1,8 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { createWorkflow, categories } from '../lib/api'
 
-export const Route = createFileRoute('/submit')({
-  component: SubmitPage,
-})
-
-function SubmitPage() {
+export function SubmitPage() {
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
@@ -70,7 +66,7 @@ function SubmitPage() {
         tags,
       })
 
-      navigate({ to: `/workflow/${formData.slug}` })
+      navigate(`/workflow/${formData.slug}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit workflow')
     } finally {

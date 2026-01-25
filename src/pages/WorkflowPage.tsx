@@ -1,21 +1,19 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { Highlight, themes } from 'prism-react-renderer'
 import { getWorkflowBySlug, incrementDownloads } from '../lib/api'
 import type { Workflow } from '../lib/supabase'
 
-export const Route = createFileRoute('/workflow/$slug')({
-  component: WorkflowDetailPage,
-})
-
-function WorkflowDetailPage() {
-  const { slug } = Route.useParams()
+export function WorkflowPage() {
+  const { slug } = useParams<{ slug: string }>()
   const [workflow, setWorkflow] = useState<Workflow | null | undefined>(undefined)
   const [copied, setCopied] = useState(false)
   const [yamlCopied, setYamlCopied] = useState(false)
 
   useEffect(() => {
-    getWorkflowBySlug(slug).then(setWorkflow)
+    if (slug) {
+      getWorkflowBySlug(slug).then(setWorkflow)
+    }
   }, [slug])
 
   if (workflow === undefined) {

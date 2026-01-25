@@ -1,20 +1,18 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getWorkflows, categories } from '../lib/api'
 import type { Workflow } from '../lib/supabase'
 
-export const Route = createFileRoute('/category/$category')({
-  component: CategoryPage,
-})
-
-function CategoryPage() {
-  const { category } = Route.useParams()
+export function CategoryPage() {
+  const { category } = useParams<{ category: string }>()
   const [workflows, setWorkflows] = useState<Workflow[] | undefined>(undefined)
 
   const categoryInfo = categories.find((c) => c.id === category)
 
   useEffect(() => {
-    getWorkflows({ category, limit: 50 }).then(setWorkflows)
+    if (category) {
+      getWorkflows({ category, limit: 50 }).then(setWorkflows)
+    }
   }, [category])
 
   return (

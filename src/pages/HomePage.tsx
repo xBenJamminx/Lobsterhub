@@ -1,13 +1,9 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { getWorkflows, searchWorkflows, categories } from '../lib/api'
 import type { Workflow } from '../lib/supabase'
 
-export const Route = createFileRoute('/')({
-  component: HomePage,
-})
-
-function HomePage() {
+export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [featuredWorkflows, setFeaturedWorkflows] = useState<Workflow[]>([])

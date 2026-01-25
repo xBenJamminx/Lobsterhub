@@ -3,19 +3,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start",
-    "lint": "eslint .",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
-    "@tanstack/react-router": "1.86.0",
-    "@tanstack/start": "1.86.0",
     "prism-react-renderer": "^2.4.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
@@ -24,12 +22,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.7.2",
-    "vite": "^6.0.0",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vinxi": "0.4.3"
-  },
-  "overrides": {
-    "@tanstack/react-router": "1.86.0",
-    "@tanstack/router-generator": "1.86.0"
+    "vite": "^6.0.0"
   }
 }
