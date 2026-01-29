@@ -16,9 +16,13 @@ CREATE TABLE workflows (
   tags TEXT[] DEFAULT '{}',
   downloads INTEGER DEFAULT 0,
   featured BOOLEAN DEFAULT FALSE,
+  status TEXT DEFAULT 'approved' CHECK (status IN ('pending', 'approved', 'rejected')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Index for status filtering
+CREATE INDEX idx_workflows_status ON workflows(status);
 
 -- Indexes for common queries
 CREATE INDEX idx_workflows_slug ON workflows(slug);

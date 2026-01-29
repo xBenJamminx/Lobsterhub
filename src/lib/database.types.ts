@@ -24,6 +24,7 @@ export interface Database {
           tags: string[]
           downloads: number
           featured: boolean
+          status: 'pending' | 'approved' | 'rejected'
           created_at: string
           updated_at: string
         }
@@ -41,6 +42,7 @@ export interface Database {
           tags?: string[]
           downloads?: number
           featured?: boolean
+          status?: 'pending' | 'approved' | 'rejected'
           created_at?: string
           updated_at?: string
         }
@@ -58,6 +60,7 @@ export interface Database {
           tags?: string[]
           downloads?: number
           featured?: boolean
+          status?: 'pending' | 'approved' | 'rejected'
           created_at?: string
           updated_at?: string
         }

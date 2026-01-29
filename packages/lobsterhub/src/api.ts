@@ -15,6 +15,8 @@ export interface Workflow {
   category: string
   tags: string[]
   downloads: number
+  featured: boolean
+  status: 'pending' | 'approved' | 'rejected'
   created_at: string
 }
 

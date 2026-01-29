@@ -1,6 +1,6 @@
 {
   "name": "lobsterhub",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "CLI for LobsterHub - Install and manage Lobster workflows",
   "type": "module",
   "bin": {
@@ -32,6 +32,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/clawdbot/lobsterhub"
+    "url": "https://github.com/xBenJamminx/Lobsterhub"
   }
 }
